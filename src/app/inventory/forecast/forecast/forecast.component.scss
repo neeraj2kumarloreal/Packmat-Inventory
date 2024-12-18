@@ -1,0 +1,13 @@
+.mat-elevation-z8 {
+    width: 80%;
+}
+
+.forecast-quantity-input {
+    padding: 10px 4px;
+    border: none !important;
+    border-bottom: 1px solid black !important;
+}
+
+.mat-mdc-form-field-bottom-align::before{
+    display: none;
+}

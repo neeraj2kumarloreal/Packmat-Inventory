@@ -1,0 +1,91 @@
+<div class="mat-elevation-z8">
+    <div style="padding: 10px 10px;
+    border-bottom: 1px solid #dddbdb;
+    display: flex
+;
+    align-items: center;
+    justify-content: space-between;
+">
+        <mat-form-field style="width: 40%;margin-bottom: -1.25em;">
+            <mat-label>Search</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Search by product name or product code">
+        </mat-form-field>
+        <button mat-raised-button color="primary" [disabled]="editedRowIndex !==-1" (click)="submitForecast()">Submit
+            Forecast</button>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Name</th>
+            <td mat-cell *matCellDef="let row">
+                <ng-container>
+                    {{ row.name }}
+                </ng-container>
+                <!-- <ng-template #editCell>
+                    <input [(ngModel)]="row.name" placeholder="Name">
+                </ng-template> -->
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="code">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Code</th>
+            <td mat-cell *matCellDef="let row">
+                <ng-container>
+                    {{ row.code }}
+                </ng-container>
+                <!-- <ng-template #editCell>
+                    <input [(ngModel)]="row.email" placeholder="Email">
+                </ng-template> -->
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="image">
+            <th mat-header-cell *matHeaderCellDef>Product Image</th>
+            <td mat-cell *matCellDef="let element">
+
+                <img [src]="element?.image" alt="Product Image" class="product-img" />
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="forecastQuantity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Forecast Quantity</th>
+            <td mat-cell *matCellDef="let row">
+                <ng-container *ngIf="editedRowIndex !== row.id; else editCell">
+                    {{ row.forecastQuantity }}
+                </ng-container>
+                <ng-template #editCell>
+                    <input [(ngModel)]="row.forecastQuantity" placeholder="Enter forecast quantity" type="number"
+                        min="0" class="forecast-quantity-input">
+                </ng-template>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let row">
+                <ng-container *ngIf="editedRowIndex !== row.id; else saveCancel">
+                    <button mat-icon-button (click)="startEditing(row)" [disabled]="shouldDisableEditButton(row)">
+                        <mat-icon>edit</mat-icon>
+                        <!-- edit -->
+                    </button>
+
+                </ng-container>
+                <ng-template #saveCancel>
+                    <button mat-icon-button color="primary" (click)="saveRow(row)">
+                        <mat-icon>done</mat-icon>
+                        <!-- done -->
+                    </button>
+                    <button mat-icon-button color="warn" (click)="cancelEditing(row)">
+                        <mat-icon>cancel</mat-icon>
+                        <!-- cancel -->
+                    </button>
+                </ng-template>
+            </td>
+        </ng-container>
+
+        <!-- Table rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5,10, 20, 50]" showFirstLastButtons></mat-paginator>
+
+</div>

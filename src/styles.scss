@@ -1,1 +1,62 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.fab-button {
+    position: absolute !important;
+    top: -20px !important;
+    right: -20px !important;
+}
+
+.mat-elevation-z8 {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin: 50px auto;
+}
+
+/* Set the table width to 100% to utilize the full width */
+.mat-table {
+    width: 100%;
+  }
+  
+  /* Set the table layout to fixed to ensure equal width columns */
+  .mat-table {
+    table-layout: fixed;
+  }
+  
+  /* Set equal width for all header cells */
+  .mat-header-cell,
+  .mat-cell {
+    flex: 1;
+  }
+
+  .mat-row:hover {
+    background-color: rgb(243, 242, 242);
+  }
+
+  .dialog-toolbar {
+    margin: -24px !important;
+    margin-bottom: 10px !important;
+    width: auto !important;
+  }
+  
+  .flex-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .product-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+  }
