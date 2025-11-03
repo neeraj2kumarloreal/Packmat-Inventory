@@ -23,6 +23,4 @@ export class ExactActiveRouterLinkDirective {
       this.el.nativeElement.classList.remove('active-exact');
     }
   }
-
-
 }

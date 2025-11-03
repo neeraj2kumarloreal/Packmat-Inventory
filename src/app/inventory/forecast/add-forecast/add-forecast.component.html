@@ -1,0 +1,74 @@
+<div class="main-class">
+    <h1 class="main-header">Forecast Entry Form</h1>
+    <form [formGroup]="forecastForm">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="start stretch">
+            <!-- Left Column: Autocomplete, Name, and Available Quantity -->
+            <div fxFlex="50" fxLayout="column" fxLayoutGap="16px">
+                <mat-form-field appearance="outline">
+                    <mat-label>Select PMCode</mat-label>
+                    <input type="text" placeholder="Search by PMCode" aria-label="Select PMCode" matInput
+                        formControlName="pmCode" [matAutocomplete]="auto" required (focus)="onProductFilterFocus()">
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
+                        (optionSelected)="onProductSelected($event)">
+                        <mat-option *ngFor="let item of productFilteredOptions | async; trackBy: trackById"
+                            [value]="item">
+                            {{item?.Code}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="forecastForm.get('pmCode')?.hasError('required')">
+                        {{ getErrorMessage() }}
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="name" placeholder="Name" required readonly />
+                    <mat-error *ngIf="forecastForm.get('name')?.hasError('required')">
+                        {{ getErrorMessage() }}
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Available Quantity</mat-label>
+                    <input matInput formControlName="availableQuantity" placeholder="Available Quantity" required
+                        readonly />
+                    <mat-error *ngIf="forecastForm.get('availableQuantity')?.hasError('required')">
+                        {{ getErrorMessage() }}
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Forecast Quantity</mat-label>
+                    <input matInput formControlName="forecastQuantity" placeholder="Enter Forecast Quantity" required
+                        type="number" />
+                    <mat-error *ngIf="forecastForm.get('forecastQuantity')?.hasError('required')">
+                        {{ getErrorMessage() }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <!-- Right Column: Product Image -->
+            <div fxFlex="50" fxLayout="column" fxLayoutAlign="start center">
+                <h4>Product Image</h4>
+                <img [src]="selectedProductImageUrl" alt="Product Image" class="product-img-forecast-page" />
+            </div>
+        </div>
+
+        <!-- Full Width: Forecast Quantity -->
+        <!-- <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="start stretch">
+           
+        </div> -->
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center"
+            style="margin-top:20px">
+           
+            <button mat-raised-button color="primary" matTooltip="Back" [routerLink]="['/packmat/forecast']"
+            aria-label="Example icon button with a menu icon">
+                <mat-icon>arrow_back</mat-icon> Back
+            </button>
+            <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()"
+                [disabled]="!(forecastForm.valid)">
+                <mat-icon>save</mat-icon> Submit
+            </button>
+
+        </div>
+    </form>
+</div>

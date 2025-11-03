@@ -1,0 +1,81 @@
+<mat-toolbar color="primary">
+    <span>Create</span>
+    <span class="example-spacer"></span>
+    <span class="spacer"></span>
+    <button class="mat-dialog-close" mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+</mat-toolbar>
+
+<mat-dialog-content class="mat-typography" style="overflow-x: hidden;">
+    <!-- <h1>Request Details</h1> -->
+    <form [formGroup]="gatepassRequestDetailForm">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center">
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Metier</mat-label>
+                <input matInput formControlName="metier" placeholder="Enter Metier" required />
+                <mat-error *ngIf="gatepassRequestDetailForm.get('metier')?.hasError('required')">{{
+                    getErrorMessage()
+                    }}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>RMCode</mat-label>
+                <input matInput formControlName="rmCode" placeholder="Enter RMCode" required />
+                <mat-error *ngIf="gatepassRequestDetailForm.get('rmCode')?.hasError('required')">{{
+                    getErrorMessage()
+                    }}</mat-error>
+            </mat-form-field>
+
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center">
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Quantity in kg</mat-label>
+                <input matInput formControlName="quantityInKg" placeholder="Enter Quantity in kg" required
+                    type="number" />
+                <mat-error *ngIf="gatepassRequestDetailForm.get('quantityInKg')?.hasError('required')">{{
+                    getErrorMessage()
+                    }}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Rate</mat-label>
+                <input matInput formControlName="rate" placeholder="Enter Rate" required
+                    type="number" />
+                <mat-error *ngIf="gatepassRequestDetailForm.get('rate')?.hasError('required')">{{
+                    getErrorMessage()
+                    }}</mat-error>
+            </mat-form-field>
+
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center">
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>No. of Packs</mat-label>
+                <input matInput formControlName="noOfPacks" placeholder="Enter No. of Packs" required
+                    type="number" />
+                <mat-error *ngIf="gatepassRequestDetailForm.get('noOfPacks')?.hasError('required')">{{
+                    getErrorMessage()
+                    }}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Amount In INR</mat-label>
+                <input matInput formControlName="amountInINR" placeholder="Enter Amount In INR" required
+                    type="number" />
+                <mat-error *ngIf="gatepassRequestDetailForm.get('amountInINR')?.hasError('required')">{{
+                    getErrorMessage()
+                    }}</mat-error>
+            </mat-form-field>
+
+        </div>
+
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()"
+        [disabled]="!gatepassRequestDetailForm.valid">
+        <mat-icon>save</mat-icon> Submit
+    </button>
+    <button mat-raised-button color="primary" mat-dialog-close>
+        <mat-icon>cancel</mat-icon> Close
+    </button>
+</mat-dialog-actions>

@@ -2,61 +2,191 @@
 
 html,
 body {
-    height: 100%;
+  height: 100%;
 }
 
 body {
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .fab-button {
-    position: absolute !important;
-    top: -20px !important;
-    right: -20px !important;
+  position: absolute !important;
+  top: -20px !important;
+  right: -20px !important;
 }
 
 .mat-elevation-z8 {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    margin: 50px auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  // margin: 50px auto;
+  // width: 90% !important;
 }
 
 /* Set the table width to 100% to utilize the full width */
+// .mat-table {
+//     width: auto;
+//   }
+table {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+
+/* Set the table layout to fixed to ensure equal width columns */
 .mat-table {
-    width: 100%;
-  }
-  
-  /* Set the table layout to fixed to ensure equal width columns */
-  .mat-table {
-    table-layout: fixed;
-  }
-  
-  /* Set equal width for all header cells */
-  .mat-header-cell,
-  .mat-cell {
-    flex: 1;
-  }
+  table-layout: fixed;
+}
 
-  .mat-row:hover {
-    background-color: rgb(243, 242, 242);
-  }
+/* Set equal width for all header cells */
+.mat-header-cell,
+.mat-cell {
+  flex: 1;
+}
 
-  .dialog-toolbar {
-    margin: -24px !important;
-    margin-bottom: 10px !important;
-    width: auto !important;
-  }
-  
-  .flex-container{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .product-img {
-    width: 100px;
-    height: 100px;
-    border-radius: 10px;
-  }
+.mat-row:hover {
+  background-color: rgb(243, 242, 242);
+}
+
+.dialog-toolbar {
+  margin: -24px !important;
+  margin-bottom: 10px !important;
+  width: auto !important;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+// .product-img {
+//   width: 100px;
+//   height: 100px;
+//   border-radius: 10px;
+// }
+/* ... other styles ... */
+
+.image-container {
+  position: static;
+  display: inline-block;
+  /* This is important for tooltip positioning */
+  cursor: pointer;
+}
+
+.product-img {
+  width: 50px;
+  height: 50px;
+  display: block;
+  border-radius: 4px;
+}
+
+.large-image {
+  position: fixed;
+  /* Key change: Fixed positioning */
+  // position: absolute;
+  top: 0;
+  /* Initial position - will be adjusted with JavaScript */
+  left: 0;
+  /* Initial position - will be adjusted with JavaScript */
+  opacity: 0;
+  pointer-events: none;
+  /* Prevents interaction with the large image */
+  // transform: translate(-50%, -100%);
+  transition: opacity 0.8s ease;
+  z-index: 10000;
+  width: 165px;
+  /* Adjust width as needed */
+  height: 165px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
+  /* Optional: Add a shadow */
+  border: 1px solid #ccc;
+  /* Optional: Add a border */
+  border-radius: 10px;
+}
+
+.image-container:hover .large-image {
+  opacity: 1;
+}
+
+.main-class {
+  margin: 50px auto;
+  width: 90%;
+}
+
+.main-header {
+  text-align: center !important;
+  margin-bottom: 40px !important;
+}
+
+.black-button {
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+
+
+/* Status Styles */
+
+.pending-request {
+  --mdc-chip-label-text-color: black;
+  --mdc-chip-elevated-container-color: #f2f2ad;
+}
+
+/* Light Yellow */
+.in-progress-request {
+  --mdc-chip-label-text-color: black;
+  --mdc-chip-elevated-container-color: #ADD8E6;
+}
+
+/* Light Brequestlue */
+.approved-request {
+  --mdc-chip-label-text-color: black;
+  // --mdc-chip-elevated-container-color: #00ffffa3; #6affffa3
+  --mdc-chip-elevated-container-color: #6affffa3;
+}
+
+/* Light Green */
+.in-transit-request {
+  --mdc-chip-label-text-color: black;
+  --mdc-chip-elevated-container-color: #e0e0e0;
+}
+
+/* Orange */
+.received-request {
+  --mdc-chip-label-text-color: black;
+  // --mdc-chip-elevated-container-color: #00FF7F;
+  --mdc-chip-elevated-container-color: #D1FFBD;
+}
+
+/* Spring Green */
+.rejected-request {
+  --mdc-chip-label-text-color: black;
+  --mdc-chip-elevated-container-color: #FFC0CB;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+::ng-deep .mat-mdc-dialog-container .mdc-dialog__content{
+  color: black !important;
+}
+
+.no-data{
+  text-align: center !important;
+  padding: 30px 0px !important;
+}
+
+
+.profile {
+  background-color: white;
+  color: black;
+  border-radius: 50%;
+  padding: 9px;
+}

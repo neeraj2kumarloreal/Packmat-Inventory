@@ -94,7 +94,7 @@ import { FormsModule } from '@angular/forms';
     PlatformModule,
     PortalModule,
     DragDropModule,
-    FormsModule
+    FormsModule,
   ]
 })
 export class AngularMaterialModule { }

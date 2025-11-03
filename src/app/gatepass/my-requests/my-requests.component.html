@@ -1,0 +1,385 @@
+<div class="card fade-in">
+    <h2 style="margin-bottom: 24px; color: #1e293b; font-size: 24px; font-weight: 600;">My Requests</h2>
+
+    <!-- Create New Request Section -->
+    <div class="card" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+        <h3 style="margin-bottom: 20px; color: #374151; font-size: 18px;">Create New Request</h3>
+
+        <!-- Request Type Selection -->
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Request Type *</label>
+                <select class="form-select" [(ngModel)]="selectedRequestType" (change)="onRequestTypeChange()">
+                    <option value="">Select Request Type</option>
+                    <option value="Raw Material">Raw Material</option>
+                    <option value="Packaging Material">Packaging Material</option>
+                    <option value="Packmat">Packmat</option>
+                    <option value="Finished Goods">Finished Goods</option>
+                    <option value="Bulk">Bulk</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Dynamic Form Fields -->
+        <div *ngIf="selectedRequestType" class="fade-in">
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Customer Name *</label>
+                    <input type="text" class="form-input" [(ngModel)]="currentRequest.customerName"
+                        placeholder="Enter customer name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Customer Email</label>
+                    <input type="text" class="form-input" [(ngModel)]="currentRequest.customerEmail"
+                        placeholder="Enter customer email">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Address *</label>
+                    <select class="form-select" [(ngModel)]="currentRequest.address">
+                        <option value="" disabled selected>Select address</option>
+                        <option *ngFor="let addr of addresses" [value]="addr?.title">
+                            {{ addr?.title }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">No. of Packages *</label>
+                    <input [(ngModel)]="currentRequest.noOfPackages" class="form-input"
+                        placeholder="Enter No. of Packages" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Weight *</label>
+                    <input [(ngModel)]="currentRequest.weight" class="form-input" placeholder="Enter Weight" />
+                </div>
+            </div>
+            <!-- Excel Upload for Raw Material -->
+            <div class="form-group" style="margin-bottom: 24px;">
+                <label class="form-label">Excel Upload (Optional)</label>
+                <div class="upload-area" [class.dragover]="isDragOver" (dragover)="onDragOver($event)"
+                    (dragleave)="onDragLeave($event)" (drop)="onFileDropped($event)" (click)="fileInput.click()">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                        <span class="material-icons" style="font-size: 48px; color: #9ca3af;">cloud_upload</span>
+                        <div>
+                            <p style="margin-bottom: 8px; color: #374151; font-weight: 500;">Drop Excel file here or
+                                click to upload</p>
+                            <p style="color: #6b7280; font-size: 14px;">Supports .xlsx, .xls files</p>
+                        </div>
+                    </div>
+                </div>
+                <input #fileInput type="file" accept=".xlsx,.xls" (change)="onFileSelected($event)"
+                    style="display: none;">
+                <div class="action-buttons" style="margin-top: 16px;">
+                    <button type="button" class="btn btn-outline" (click)="downloadTemplate()">
+                        <span class="material-icons" style="font-size: 16px;">download</span>
+                        Download Template
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dynamic Table -->
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th *ngFor="let column of getTableColumns()" [style.min-width]="getColumnWidth(column)">{{
+                                column }}</th>
+                            <th style="width: 80px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of currentRequest.items; let i = index">
+                            <td>{{ item.srNo }}</td>
+
+                            <!-- Raw Material Columns -->
+                            <ng-container *ngIf="selectedRequestType === 'Raw Material'">
+                                <!-- <td><input type="text" [(ngModel)]="item.metier" (input)="calculateAmount(i)"
+                                        placeholder="Enter métier"></td> -->
+                                <td>
+                                    <select [(ngModel)]="item.metier" (change)="calculateAmount(i)" style="padding: 8px;
+                                    border: 1px solid #d1d5db;
+                                    border-radius: 4px;
+                                    font-size: 13px; width: 100%;">
+                                        <option value="" disabled selected>Select métier</option>
+                                        <option *ngFor="let metier of metiers" [value]="metier">{{ metier }}</option>
+                                    </select>
+                                </td>
+                                <!-- <td><input type="text" [(ngModel)]="item.rmCode" (input)="calculateAmount(i)"
+                                        placeholder="Enter RM code"></td> -->
+                                <!-- <td style="position: relative;">
+                                    <input type="text" [(ngModel)]="item.rmCode"
+                                        (input)="calculateAmount(i); showDropdown(i)" (focus)="showDropdown(i)"
+                                        (blur)="onBlurDropdown()" placeholder="Enter RM code"
+                                        style="padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 13px;">
+
+                                    
+                                    <ul *ngIf="openDropdownIndex === i && getFilteredRmCodes(item.rmCode || '').length"
+                                        style="position: absolute; z-index: 1000; background: white; border: 1px solid #ccc; list-style: none; margin: 0; padding: 0; max-height: 120px; overflow-y: auto;">
+                                        <li *ngFor="let code of getFilteredRmCodes(item.rmCode || '')"
+                                            (mousedown)="selectRmCode(item, code, i)"
+                                            style="padding: 8px; cursor: pointer;">
+                                            {{ code }}
+                                        </li>
+                                    </ul>
+                                </td> -->
+                                <td style="position: relative;">
+                                    <input type="text" [(ngModel)]="item.rmCode"
+                                        (input)="calculateAmount(i); showDropdown(i)" (focus)="showDropdown(i)"
+                                        (blur)="onBlurDropdown()" placeholder="Search RM code"
+                                        style="padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 13px;">
+                                    <ul *ngIf="openDropdownIndex === i && getFilteredRmCodes(item.rmCode || '').length"
+                                        style="position: absolute; z-index: 1000; background: white; border: 1px solid #ccc; list-style: none; margin: 0; padding: 0; max-height: 120px; width: 85%;overflow-y: auto;">
+                                        <li *ngFor="let code of getFilteredRmCodes(item.rmCode || '')"
+                                            (mousedown)="selectRmCode(item, code, i)"
+                                            style="padding: 8px; cursor: pointer;">
+                                            {{ code }}
+                                        </li>
+                                    </ul>
+                                </td>
+                                <!-- <td>
+                                    <input type="number" [(ngModel)]="item.rate" placeholder="0" min="0" step="0.01" readonly>
+                                  </td> -->
+                                <td><input type="number" [(ngModel)]="item.quantity" (input)="calculateAmount(i)"
+                                        placeholder="0" min="0" step="0.01"></td>
+                                <td><input type="number" [(ngModel)]="item.rate" (input)="calculateAmount(i)"
+                                        placeholder="0" min="0" step="0.01"></td>
+                                <td><input type="number" [(ngModel)]="item.noOfPacks" (input)="calculateAmount(i)"
+                                        placeholder="0" min="0"></td>
+                            </ng-container>
+
+                            <!-- Packaging Material / Packmat Columns -->
+                            <ng-container
+                                *ngIf="selectedRequestType === 'Packaging Material' || selectedRequestType === 'Packmat'">
+                                <td><input type="text" [(ngModel)]="item.description" (input)="calculateAmount(i)"
+                                        placeholder="Enter description"></td>
+                                <td style="position: relative;" *ngIf="selectedRequestType === 'Packmat'">
+                                    <input type="text" [(ngModel)]="item.code"
+                                        (input)="calculateAmount(i); showDropdownForPackmatCode(i)" (focus)="showDropdownForPackmatCode(i)"
+                                        (blur)="onBlurDropdownForPackmatCode()" placeholder="Search packmat code"
+                                        style="padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 13px;">
+                                    <ul *ngIf="openDropdownIndexForPackmatCode === i && getFilteredPackmatCodes(item.code || '').length"
+                                        style="position: absolute; z-index: 1000; background: white; border: 1px solid #ccc; list-style: none; margin: 0; padding: 0; max-height: 120px;width: 85%; overflow-y: auto;">
+                                        <li *ngFor="let obj of getFilteredPackmatCodes(item.code || '')"
+                                            (mousedown)="selectPackmatCode(item, obj?.code, i)"
+                                            style="padding: 8px; cursor: pointer;">
+                                            {{ obj.code }} ({{ obj.name }})
+                                        </li>
+                                    </ul>
+                                </td>
+                                <td *ngIf="selectedRequestType === 'Packaging Material'"><input type="text" [(ngModel)]="item.code" (input)="calculateAmount(i)"
+                                        placeholder="Enter code"></td>
+                                <td><input type="text" [(ngModel)]="item.name" (input)="calculateAmount(i)"
+                                        placeholder="Enter name"></td>
+                                <!-- <td><input type="text" [(ngModel)]="item.contact" (input)="calculateAmount(i)"
+                                        placeholder="Enter contact"></td> -->
+                                <td><input type="number" [(ngModel)]="item.quantity" (input)="calculateAmount(i)"
+                                        placeholder="0" min="0"></td>
+                                <td><input type="number" [(ngModel)]="item.noOfPacks" (input)="calculateAmount(i)"
+                                        placeholder="0" min="0"></td>
+                                <td><input type="number" [(ngModel)]="item.rate" (input)="calculateAmount(i)"
+                                        placeholder="0" min="0" step="0.01"></td>
+                            </ng-container>
+
+                            <!-- Finished Goods Columns -->
+                            <ng-container *ngIf="selectedRequestType === 'Finished Goods'">
+                                <td><input type="text" [(ngModel)]="item.description" (input)="calculateAmount(i)"
+                                        placeholder="Enter description"></td>
+                                <td><input type="text" [(ngModel)]="item.code" (input)="calculateAmount(i)"
+                                        placeholder="Enter code"></td>
+                                <td><input type="text" [(ngModel)]="item.name" (input)="calculateAmount(i)"
+                                        placeholder="Enter name"></td>
+                                <!-- <td><input type="text" [(ngModel)]="item.formulator" (input)="calculateAmount(i)"
+                                        placeholder="Enter formulator"></td> -->
+                                <td><input type="number" [(ngModel)]="item.quantity" (input)="calculateAmount(i)"
+                                        placeholder="0" min="0"></td>
+                                <td><input type="number" [(ngModel)]="item.noOfPacks" (input)="calculateAmount(i)"
+                                        placeholder="0" min="0"></td>
+                                <td><input type="number" [(ngModel)]="item.rate" (input)="calculateAmount(i)"
+                                        placeholder="0" min="0" step="0.01"></td>
+                            </ng-container>
+
+                            <!-- Bulk Columns -->
+                            <ng-container *ngIf="selectedRequestType === 'Bulk'">
+                                <td><input type="text" [(ngModel)]="item.description" (input)="calculateAmount(i)"
+                                        placeholder="Enter description"></td>
+                                <td><input type="text" [(ngModel)]="item.code" (input)="calculateAmount(i)"
+                                        placeholder="Enter code"></td>
+                                <td><input type="text" [(ngModel)]="item.name" (input)="calculateAmount(i)"
+                                        placeholder="Enter name"></td>
+                                <!-- <td><input type="text" [(ngModel)]="item.formulator" (input)="calculateAmount(i)"
+                                        placeholder="Enter formulator"></td> -->
+                                <td><input type="number" [(ngModel)]="item.quantity" (input)="calculateAmount(i)"
+                                        placeholder="0" min="0" step="0.01"></td>
+                                <td><input type="number" [(ngModel)]="item.noOfBuckets" (input)="calculateAmount(i)"
+                                        placeholder="0" min="0"></td>
+                                <td><input type="number" [(ngModel)]="item.rate" (input)="calculateAmount(i)"
+                                        placeholder="0" min="0" step="0.01"></td>
+                            </ng-container>
+
+                            <td style="color: #059669; font-weight: 600;">₹{{ item.amount.toFixed(2) }}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger" (click)="removeItem(i)"
+                                    style="padding: 6px 8px; font-size: 12px;">
+                                    <span class="material-icons" style="font-size: 16px;">delete</span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Add Row Button -->
+            <div class="action-buttons" style="margin-top: 16px;">
+                <button type="button" class="btn btn-outline" (click)="addItem()">
+                    <span class="material-icons" style="font-size: 16px;">add</span>
+                    Add Row
+                </button>
+            </div>
+
+            <!-- Summary Section -->
+            <div class="summary-section" *ngIf="(currentRequest.items ?? []).length > 0">
+                <div class="summary-row summary-total">
+                    <span>Total Amount:</span>
+                    <span>₹{{ getTotalAmount().toFixed(2) }}</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button type="button" class="btn btn-secondary" (click)="saveDraft()" [disabled]="!isFormValid()">
+                    <span class="material-icons" style="font-size: 16px;">save</span>
+                    Save as Draft
+                </button>
+                <button type="button" class="btn btn-primary" (click)="submitRequest()" [disabled]="!isFormValid()">
+                    <span class="material-icons" style="font-size: 16px;">send</span>
+                    Submit Request
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- *ngIf="myRequests.length > 0" -->
+    <div class="fade-in">
+        <h3 style="margin: 32px 0 16px 0; color: #374151; font-size: 18px;">My Previous Requests</h3>
+        <div class="table-container">
+            <table mat-table [dataSource]="myRequests" class="table" matSort>
+                <!-- Request ID -->
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Number</th>
+                    <td mat-cell *matCellDef="let request">{{ request.invoiceNumber }}</td>
+                </ng-container>
+                <!-- Type -->
+                <ng-container matColumnDef="requestType">
+                    <th mat-header-cell *matHeaderCellDef>Request Type</th>
+                    <td mat-cell *matCellDef="let request">{{ request.requestType }}</td>
+                </ng-container>
+                <!-- Status -->
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>Status</th>
+                    <td mat-cell *matCellDef="let request">
+                        <span class="status-badge" [ngClass]="{
+                        'status-pending': request.requestStatus === 'Pending',
+                        'status-approved': request.requestStatus === 'Approved',
+                        'status-rejected': request.requestStatus === 'Rejected',
+                        'status-under-review': request.requestStatus === 'Under Review',
+                        'status-draft': request.requestStatus === 'Draft',
+                        'status-sent-back-for-changes': request.requestStatus === 'Sent Back for Changes'
+                      }">
+                            {{ request.requestStatus }}
+                        </span>
+                    </td>
+                </ng-container>
+                <!-- Created Date -->
+                <ng-container matColumnDef="createdDate">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Created Date</th>
+                    <td mat-cell *matCellDef="let request">{{ request.createdDate | date:'short' }}</td>
+                </ng-container>
+                <!-- Total Amount -->
+                <ng-container matColumnDef="totalAmount">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Sub Total</th>
+                    <td mat-cell *matCellDef="let request" class="amount">₹{{ request.subTotal.toFixed(2) }}</td>
+                </ng-container>
+                <!-- Actions -->
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+                    <td mat-cell *matCellDef="let request">
+                        <div class="action-buttons" style="gap: 8px;">
+                            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;"
+                                (click)="handleViewRequest(request)" matTooltip="View">
+                                <span class="material-icons" style="font-size: 14px;">visibility</span>
+                            </button>
+                            <button class="btn btn-success" (click)="changeStatusToPending(request)"
+                                style="padding: 6px 12px; font-size: 12px;" matTooltip="Submit Request"
+                                *ngIf="request.requestStatus === 'Draft'">
+                                <span class="material-icons" style="font-size: 14px;">check</span>
+                            </button>
+                            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;"
+                                (click)="handleEditRequest(request)" matTooltip="Update Details" *ngIf="request.requestStatus === 'Sent Back for Changes'">
+                                <span class="material-icons" style="font-size: 14px;">edit</span>
+                            </button>
+                        </div>
+                    </td>
+                </ng-container>
+                <!-- Header and Row Declarations -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <div *ngIf="myRequests.length === 0" class="alert alert-info" style="margin: 10px 10px;">
+                No previous requests found. Start by creating your first request!
+            </div>
+            <mat-paginator [pageSizeOptions]="[5,10, 20, 50]" showFirstLastButtons></mat-paginator>
+
+        </div>
+    </div>
+    <!-- Existing Requests Table -->
+    <!-- <div *ngIf="myRequests.length > 0" class="fade-in">
+        <h3 style="margin: 32px 0 16px 0; color: #374151; font-size: 18px;">My Previous Requests</h3>
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Created Date</th>
+                        <th>Total Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let request of myRequests">
+                        <td>{{ request.id }}</td>
+                        <td>{{ request.requestType }}</td>
+                        <td>
+                            <span class="status-badge" [ngClass]="{
+                  'status-pending': request.status === 'Pending',
+                  'status-approved': request.status === 'Approved',
+                  'status-rejected': request.status === 'Rejected',
+                  'status-under-review': request.status === 'Under Review'
+                }">
+                                {{ request.status }}
+                            </span>
+                        </td>
+                        <td>{{ request.createdDate | date:'short' }}</td>
+                        <td>₹{{ request.totalAmount.toFixed(2) }}</td>
+                        <td>
+                            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;">
+                                <span class="material-icons" style="font-size: 14px;">visibility</span>
+                                View
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div> -->
+
+    <!-- Alert Messages -->
+    <div *ngIf="alertMessage" class="alert" [ngClass]="{
+      'alert-success': alertType === 'success',
+      'alert-error': alertType === 'error',
+      'alert-info': alertType === 'info'
+    }">
+        {{ alertMessage }}
+    </div>
+</div>

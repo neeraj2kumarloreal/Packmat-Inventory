@@ -1,0 +1,186 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.toolbar-content {
+  display: flex;
+  justify-content: center;
+  /* Horizontally center content */
+  align-items: center;
+  /* Vertically center content */
+  width: 100%;
+  /* Ensure content spans full width */
+}
+
+.fill-remaining-space {
+  flex: 1;
+}
+
+.content-wrapper {
+  position: absolute;
+  top: 64px;
+  /* Adjust this based on your header's height */
+  bottom: 56px;
+  /* Adjust this based on your footer's height */
+  left: 0;
+  right: 0;
+  overflow: auto;
+}
+
+
+mat-card {
+  cursor: pointer;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+h1 {
+  padding: 5px;
+  text-align: center;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.card {
+  flex-basis: calc(33% - 20px);
+  /* Adjust the width and margin as needed */
+  margin: 10px;
+  box-sizing: border-box;
+  align-items: center !important;
+  background-color: #ccc;
+  max-width: 400px;
+}
+
+img {
+  width: 100px;
+  height: 50px;
+}
+
+.title-center {
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+/* toolbar.component.css */
+// .custom-toolbar {
+//   background-color: #f0f0f0; /* Background color of the toolbar */
+//   border-radius: 10px; /* Adjust the border-radius for a softer look */
+//   box-shadow: 5px 5px 10px #b9b9b9, -5px -5px 10px #ffffff; /* Neumorphism shadow */
+// }
+
+.mat-icon-button {
+  /* Background color of the button */
+  border-radius: 50%;
+  /* Make the button round */
+  width: 40px;
+  /* Adjust the button width as needed */
+  height: 40px;
+  /* Adjust the button height as needed */
+  // box-shadow: 3px 3px 5px #b9b9b9, -3px -3px 5px #ffffff; /* Neumorphism shadow for buttons */
+  // transition: box-shadow 0.3s ease-in-out; /* Add a smooth transition effect */
+}
+
+
+.mat-toolbar {
+  color: #f0f0f0 !important;
+}
+
+.mat-icon-button {
+  color: #f0f0f0 !important;
+  // background-color: #f0f0f0; /* Background color of the button */
+  border-radius: 50%;
+  /* Make the button round */
+  width: 40px;
+  /* Adjust the button width as needed */
+  height: 40px;
+  /* Adjust the button height as needed */
+  // box-shadow: 3px 3px 5px #b9b9b9, -3px -3px 5px #ffffff; /* Neumorphism shadow for buttons */
+  transition: box-shadow 0.3s ease-in-out;
+  /* Add a smooth transition effect */
+}
+
+// .mat-icon-button:hover {
+//   // box-shadow: 6px 6px 10px #b9b9b9, -6px -6px 10px #ffffff;
+//   box-shadow: 0px 0px 20px rgba(0, 0, 255, 0.5);/* Adjust the shadow on hover */
+// }
+
+/* Style the button with the "neumorphic-button" class */
+.neumorphic-button {
+  color: white;
+  /* Background color of the button */
+  border-radius: 10px;
+  /* Adjust the border-radius for a softer look */
+  // box-shadow: 5px 5px 10px #b9b9b9, -5px -5px 10px #ffffff; /* Neumorphism shadow for the specific button */
+  // transition: box-shadow 0.3s ease-in-out; /* Add a smooth transition effect */
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    // Scale the button slightly on hover
+    transform: scale(1.05);
+  }
+}
+
+// .neumorphic-button:hover {
+//   // box-shadow: 6px 6px 10px #b9b9b9, -6px -6px 10px #ffffff;
+//   box-shadow: 0px 0px 20px rgba(0, 0, 255, 0.5); /* Adjust the shadow on hover for the specific button */
+//   // transform: translateY(-2px); /* Add a subtle lift effect on hover */
+// }
+
+/* Adjust the button text color if needed */
+.neumorphic-button {
+  color: white !important;
+  /* Text color */
+}
+
+
+
+/* Add some spacing between the buttons */
+.custom-toolbar button:not(:last-child) {
+  margin-right: 10px;
+}
+
+
+.notification-icon {
+  color: #f0f0f0 !important;
+  transition: transform 0.2s ease;
+  /* Add smooth transition effect */
+
+  &:hover {
+    transform: scale(1.2);
+    /* Scale the icon on hover */
+  }
+}
+
+body {
+
+  color: white !important;
+}
+
+.mat-mdc-icon-button {
+  color: white !important;
+}
+
+
+@media (max-width: 575px) {
+  .flex-direction-column-sm {
+    flex-direction: column !important;
+  }
+}

@@ -32,8 +32,7 @@ export class InventoryService {
   //   this.context.load(currentUser);
   //   this.context.executeQueryAsync(
   //     () => {
-  //       localStorage.setItem("vitUsername", currentUser.get_title());
-  //       localStorage.setItem("vitEmail", currentUser.get_email());
+  //  
   //     },
   //     (error: any) => {
   //       console.log(error);
@@ -49,8 +48,6 @@ export class InventoryService {
       this.context.load(currentUser);
       this.context.executeQueryAsync(
         () => {
-          localStorage.setItem("vitUsername", currentUser.get_title());
-          localStorage.setItem("vitEmail", currentUser.get_email());
           resolve(currentUser);
         },
         (error: any) => {
@@ -65,7 +62,7 @@ export class InventoryService {
   public getAllItems(): Promise<any[]> {
     return new Promise((resolve, reject) => {
       const camlQuery = new SP.CamlQuery();
-      camlQuery.set_viewXml('<View><Query></Query></View>');
+      camlQuery.set_viewXml(`<View><Query><OrderBy><FieldRef Name='ID' Ascending='FALSE' /></OrderBy></Query></View>`);
       // You can customize the CAML query as needed
       const items = this.library.getItems(camlQuery);
       this.context.load(items);
@@ -87,7 +84,7 @@ export class InventoryService {
       );
     });
   }
-  
+
   public updateMultipleListItemsByIds(items: any[]): Promise<any[]> { // Return type is Promise<any[]>
     return new Promise((resolve, reject) => {
       let promises: Promise<any>[] = [];
@@ -122,4 +119,66 @@ export class InventoryService {
       );
     });
   }
+
+  public getItemByComponentCode(componentCode: string): Promise<any[]> {
+    console.log("componentCode", componentCode);
+    return new Promise((resolve, reject) => {
+      const camlQuery = new SP.CamlQuery();
+
+      // Construct the CAML query to filter ONLY by ForecastYear
+      camlQuery.set_viewXml(`
+        <View>
+          <Query>
+            <Where>
+              <Eq>
+                <FieldRef Name='PMCode' />
+                <Value Type='Text'>${componentCode}</Value>
+              </Eq>
+            </Where>
+          </Query>
+        </View>
+      `);
+
+      const items = this.library.getItems(camlQuery);
+      this.context.load(items);
+      this.context.executeQueryAsync(
+        () => {
+          const itemCollection = items.getEnumerator();
+          const result = [];
+          while (itemCollection.moveNext()) {
+            const listItem = itemCollection.get_current();
+            result.push(listItem.get_fieldValues());
+          }
+          console.log("componentCode-result", result)
+          console.log("componentCode-result - length ", result.length)
+          console.log("componentCode-result - first ", result.at(0))
+          resolve(result);
+        },
+        (error: any) => {
+          reject(error.get_message());
+        }
+      );
+    });
+  }
+  public decreaseAvailableQuantityAfterDispatched(itemId: number, avilableQuantity: number, requestedQuantity: number): Promise<any> {  // Return type is now Promise<any>
+    return new Promise((resolve, reject) => {
+      const listItem = this.library.getItemById(itemId);
+      listItem.set_item("AvailableQuantity", avilableQuantity - requestedQuantity);
+      listItem.update();
+
+      this.context.load(listItem);
+      this.context.executeQueryAsync(
+        () => {
+          resolve(listItem); // Resolves with 'any' type
+        },
+        (error: any) => {
+          reject(error);
+        }
+      );
+    });
+  }
+  // getItemByComponentCode(componentCode: string): Observable<any> {
+  //   const apiUrl = `${this.sharepointSiteUrl}/_api/web/lists/getbytitle('${this.catalogDocumentLibraryName}')/items?$filter=PMCode eq '${componentCode}'`;  // Assuming 'ComponentCode' is the internal name of the column.
+  //   return this.http.get(apiUrl);
+  // }
 }

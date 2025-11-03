@@ -1,0 +1,151 @@
+<div class="main-class">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center"
+        style="border: 1px solid darkgrey; padding: 0px 10px; border-radius: 7px; height: 78px;">
+        <div fxFlex="33" fxLayout="column">
+            <img src="https://loreal.sharepoint.com/sites/RIDemiGrand/PackmatDocuments/logo.png" style="height: 100px;
+            object-fit: contain;" alt="Loreal logo">
+        </div>
+        <div fxFlex="33" fxLayout="column"
+            style="text-align: center; border-left: 1px solid darkgrey; border-right: 1px solid darkgrey; padding: 0px 10px;">
+            <h2 style="text-decoration: underline;line-height: .7;
+            margin-top: 6px;">Demi Grand India</h2>
+            <h4>Component Request Form</h4>
+        </div>
+        <div fxFlex="33" fxLayout="column">
+            <p>DG Ref No. : {{ DGRefNo }}</p>
+            <p>Request Date: {{today | date:'dd/MM/yyyy'}}</p>
+        </div>
+    </div>
+    <h4 style="margin-top: 10px;
+    font-size: 13px;
+">Please fill in all the requested data in detail as otherwise the processing of your sample order will be rejected !
+    </h4>
+    <form [formGroup]="componentRequestForm">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center">
+            <div fxFlex="50" fxLayout="column" fxLayoutGap="16px">
+                <mat-form-field appearance="outline">
+                    <mat-label>Select Component</mat-label>
+                    <input type="text" placeholder="Search by Component Code or Name" aria-label="Select Component Code"
+                        matInput formControlName="componentCode" [matAutocomplete]="auto" required
+                        (focus)="onComponentFilterFocus()">
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onComponentSelected($event)"
+                        [displayWith]="displayFn">
+                        <mat-option *ngFor="let item of componentFilteredOptions | async; trackBy: trackById"
+                            [value]="item">
+                            {{ item?.ProductName }} ({{ item?.Code }})
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="componentRequestForm.get('componentCode')?.hasError('required')">
+                        {{ getErrorMessage() }}
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Available Quantity</mat-label>
+                    <input matInput formControlName="availableQuantity" placeholder="Enter Available Quantity" required
+                        type="number" readonly />
+                    <mat-error *ngIf="componentRequestForm.get('availableQuantity')?.hasError('required')">
+                        {{ getErrorMessage() }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <!-- Right Column: Product Image -->
+            <div fxFlex="50" fxLayout="column" fxLayoutAlign="start center">
+
+                <img [src]="imageURL" alt="Product Image" style="    max-width: 100%;
+                height: 186px;
+                object-fit: contain;
+                margin-bottom: 10px;
+                border-radius: 10px;
+            " />
+            </div>
+
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center">
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Quantity</mat-label>
+                <!-- [max]="componentRequestForm.get('availableQuantity')?.value || 0" -->
+                <input matInput formControlName="requestedQuantity" placeholder="Enter Quantity" required type="number"
+                    min="1"  />
+                <mat-error *ngIf="componentRequestForm.get('requestedQuantity')?.hasError('required')">
+                    {{ getErrorMessage() }}
+                </mat-error>
+                <!-- <mat-error *ngIf="componentRequestForm.get('requestedQuantity')?.hasError('max')">
+                    The requested quantity cannot exceed the available quantity.
+                </mat-error> -->
+            </mat-form-field>
+            <mat-form-field appearance="outline" (click)="openDatepicker(requiredDatePicker)" fxFlex>
+                <mat-label>Required Date</mat-label>
+                <input matInput [matDatepicker]="requiredDatePicker" placeholder="Choose Required Date"
+                    formControlName="requiredDate" [min]="today" />
+                <mat-datepicker-toggle matSuffix [for]="requiredDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #requiredDatePicker></mat-datepicker>
+
+                <mat-error *ngIf="componentRequestForm.get('requiredDate')?.hasError('required')">
+                    {{ getErrorMessage() }}
+                </mat-error>
+            </mat-form-field>
+
+
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center">
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Purpose</mat-label>
+                <mat-select formControlName="purpose" required>
+                    <mat-option *ngFor="let purpose of purposeList" [value]="purpose">{{
+                        purpose
+                        }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="componentRequestForm.get('pupose')?.hasError('required')">{{
+                    getErrorMessage()
+                    }}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Metier & Project Name</mat-label>
+                <input matInput formControlName="metierAndProjectName" placeholder="Enter Metier & Project Name"
+                    required />
+                <mat-error *ngIf="componentRequestForm.get('metierAndProjectName')?.hasError('required')">
+                    {{ getErrorMessage() }}
+                </mat-error>
+            </mat-form-field>
+
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" style="align-items: center;">
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Application</mat-label>
+                <input matInput formControlName="application" placeholder="Enter Application" required />
+                <mat-error *ngIf="componentRequestForm.get('application')?.hasError('required')">
+                    {{ getErrorMessage() }}
+                </mat-error>
+            </mat-form-field>
+            <div fxFlex>
+                <label id="requirement-is-part-of-yearly-forecast" style="font-size: 17px;">Requirement is part of
+                    yearly
+                    forecast ?</label>
+                <mat-radio-group aria-labelledby="requirement-is-part-of-yearly-forecast"
+                    formControlName="isReqPartOfYearlyForecast" color="primary">
+                    <mat-radio-button value="Yes">Yes</mat-radio-button>
+                    <mat-radio-button value="No">No</mat-radio-button>
+                </mat-radio-group>
+                <mat-error *ngIf="componentRequestForm.get('isReqPartOfYearlyForecast')?.hasError('required')">
+                    {{ getErrorMessage() }}
+                </mat-error>
+            </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center"
+            style="margin-top:20px">
+
+            <button mat-raised-button color="primary" matTooltip="Back" [routerLink]="['/packmat/request']"
+                aria-label="Example icon button with a menu icon">
+                <mat-icon>arrow_back</mat-icon> Back
+            </button>
+            <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()"
+                [disabled]="!(componentRequestForm.valid)">
+                <mat-icon>save</mat-icon> Submit
+            </button>
+
+        </div>
+    </form>
+</div>

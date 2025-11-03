@@ -1,0 +1,126 @@
+<mat-dialog-content style="overflow-x: hidden; padding: 0px;">
+    <div class="card" style=" background: #f8fafc; margin-bottom: 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="color: #374151; font-size: 18px;">Invoice Number - {{ requestDetails.invoiceNumber }}</h3>
+            <button class="btn btn-outline" mat-dialog-close style="padding: 8px 12px;">
+                <span class="material-icons" style="font-size: 16px;">close</span>
+                Close
+            </button>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Request Type:</label>
+                <p style="margin-top: 4px; color: #374151;">{{ requestDetails.requestType }}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Customer Name:</label>
+                <p style="margin-top: 4px; color: #374151;">{{ requestDetails.customerName }}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Customer Email:</label>
+                <p style="margin-top: 4px; color: #374151;">{{ requestDetails.customerEmail || 'N/A' }}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Customer Address:</label>
+                <p style="margin-top: 4px; color: #374151;">{{ requestDetails.customerAddress }}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">No. of Packages</label>
+                <p style="margin-top: 4px; color: #374151;">{{ requestDetails.noOfPackages }}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Weight</label>
+                <p style="margin-top: 4px; color: #374151;">{{ requestDetails.weight }}</p>
+            </div>
+        </div>
+
+        <div class="table-container" style="margin-top: 20px;">
+            <table mat-table [dataSource]="dataSource" class="table" matSort>
+                <!-- Dynamic Header -->
+                <ng-container *ngFor="let col of columnConfigs" [matColumnDef]="col.columnDef">
+                    <th mat-header-cell *matHeaderCellDef>{{ col.header }}</th>
+                    <td mat-cell *matCellDef="let element">{{ col.cell(element) }}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5,10,20,50]" showFirstLastButtons></mat-paginator>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary-section">
+            <div class="summary-row summary-total">
+                <span>Total Amount:</span>
+                <span>₹{{ requestDetails.subTotal.toFixed(2) }}</span>
+            </div>
+        </div>
+        <div *ngIf="approvalStatus === 'Rejected' || approvalStatus === 'Sent Back for Changes'">
+            <h3 style="margin-bottom: 20px; color: #374151; font-size: 18px; font-weight: bold;">Approval Remarks</h3>
+            <div class="form-row">
+                <div class="form-group" *ngIf="approvalStatus === 'Sent Back for Changes'">
+                    <label class="form-label">Remark</label>
+                    <p style="margin-top: 4px; color: #374151;">{{ requestDetails.secondaryApprovalRemark || 'N/A' }}
+                    </p>
+                </div>
+                <div class="form-group" *ngIf="approvalStatus === 'Rejected'">
+                    <label class="form-label">Final Approval Remark</label>
+                    <p style="margin-top: 4px; color: #374151;">{{ requestDetails.finalApprovalRemark || 'N/A' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="approvalStatus === 'Under Review' || approvalStatus === 'Approved' || approvalStatus === 'Rejected'">
+            <h3 style="margin-bottom: 20px; color: #374151; font-size: 18px; font-weight: bold;">Transportation Details
+            </h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <p style="margin-top: 4px; color: #374151;">{{ requestDetails.transporterName }}</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Vehical Number</label>
+                    <p style="margin-top: 4px; color: #374151;">{{ requestDetails.vehicalNo }}</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">LR Number</label>
+                    <p style="margin-top: 4px; color: #374151;">{{ requestDetails.lrNo }}</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Seal Number</label>
+                    <p style="margin-top: 4px; color: #374151;">{{ requestDetails.sealNo }}</p>
+                </div>
+            </div>
+            <h3 style="margin-bottom: 20px; color: #374151; font-size: 18px; font-weight: bold;">Other Details</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">P.O. No.</label>
+                    <p style="margin-top: 4px; color: #374151;">{{ requestDetails.poNo || 'N/A' }}</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">P.O. Date</label>
+                    <p style="margin-top: 4px; color: #374151;">{{( requestDetails.poDate | date:'short') || 'N/A'}}</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Value of Product</label>
+                    <p style="margin-top: 4px; color: #374151;">{{ requestDetails.valueOfProduct || 'N/A' }}</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Taxes</label>
+                    <p style="margin-top: 4px; color: #374151;">{{ requestDetails.taxes || 'N/A' }}</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Other Charges</label>
+                    <p style="margin-top: 4px; color: #374151;">{{ requestDetails.otherCharges || 'N/A' }}</p>
+                </div>
+
+            </div>
+        </div>
+        
+       
+
+    </div>
+</mat-dialog-content>

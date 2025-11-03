@@ -1,0 +1,148 @@
+<div class="main-class">
+    <h4>Note</h4>
+    <ul>
+        <li>
+            <h4>This is the annual forecast you are raising for your full team.</h4>
+        </li>
+        <li>
+            <h4>We will reassess it after 6 months.</h4>
+        </li>
+    </ul>
+    <p style="text-align: end;color: crimson; font-size: 15px;" *ngIf="!isForecastEnabled">
+        (The forecast page is currently disabled. Please contact the administrator to enable it.)
+    </p>
+
+    <div class="mat-elevation-z8">
+        <div style="padding: 10px 10px;
+    border-bottom: 1px solid #dddbdb;
+    display: flex
+;
+    align-items: center;
+    justify-content: space-between;
+">
+            <mat-form-field style="width: 40%;margin-bottom: -1.25em;">
+                <mat-label>Search</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Search by Component Name or Code">
+            </mat-form-field>
+            <!-- <div>
+                <p style="font-size: 19px; text-align: center;">Manage Forecast</p>
+                <p><mat-slide-toggle (change)="handleToggleChange($event)" [checked]="isForecastEnabled"
+                        color="primary">{{isForecastEnabled ? 'Enabled' : 'Disabled'}}</mat-slide-toggle></p>
+            </div> -->
+            <div *ngIf="currentUserRole === 'Pune DG Admin'">
+                <p style="font-size: 19px; text-align: center;">Manage Forecast</p>
+                <mat-slide-toggle (change)="handleToggleChange($event)" [checked]="isForecastEnabled" color="primary"
+                    id="forecast-toggle">
+                    <!-- Put the Label *after* the toggle for best Material Design practice -->
+                    <label for="forecast-toggle">
+                        {{ isForecastEnabled ? 'Forecast Enabled' : 'Forecast Disabled' }}
+                    </label>
+                </mat-slide-toggle>
+            </div>
+
+            <button mat-raised-button color="primary" [disabled]="editedRowIndex !==-1 || !isForecastEnabled"
+                (click)="submitForecast()">Submit
+                Forecast</button>
+        </div>
+
+        <table mat-table [dataSource]="dataSource" matSort>
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Component Name</th>
+                <td mat-cell *matCellDef="let row" matTooltip="{{ row.name }}">
+                    <ng-container>
+                        {{ row.name }}
+                    </ng-container>
+                    <!-- <ng-template #editCell>
+                    <input [(ngModel)]="row.name" placeholder="Name">
+                </ng-template> -->
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="code">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Component Code</th>
+                <td mat-cell *matCellDef="let row" matTooltip="{{ row.code }}">
+                    <ng-container>
+                        {{ row.code }}
+                    </ng-container>
+                    <!-- <ng-template #editCell>
+                    <input [(ngModel)]="row.email" placeholder="Email">
+                </ng-template> -->
+                </td>
+            </ng-container>
+            <!-- <ng-container matColumnDef="image">
+            <th mat-header-cell *matHeaderCellDef>Product Image</th>
+            <td mat-cell *matCellDef="let element">
+
+                <img [src]="element?.image" alt="Product Image" class="product-img" />
+            </td>
+        </ng-container> -->
+            <ng-container matColumnDef="image">
+                <th mat-header-cell *matHeaderCellDef>Component Image</th>
+                <td mat-cell *matCellDef="let element">
+                    <div class="image-container" #imageContainer>
+                        <img [src]="element.image" alt="Product Image" class="product-img">
+                        <img [src]="element.largeImage || element.image" alt="Enlarged Product Image"
+                            class="large-image">
+                    </div>
+                </td>
+            </ng-container>
+
+
+
+            <ng-container matColumnDef="forecastQuantity">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Forecast Quantity</th>
+                <td mat-cell *matCellDef="let row">
+                    <ng-container *ngIf="editedRowIndex !== row.id; else editCell">
+                        {{ row.forecastQuantity }}
+                    </ng-container>
+                    <ng-template #editCell>
+                        <input [(ngModel)]="row.forecastQuantity" placeholder="Enter forecast quantity" type="number"
+                            min="0" class="forecast-quantity-input">
+                    </ng-template>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="reason">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Reason</th>
+                <td mat-cell *matCellDef="let row" matTooltip="{{ row.reason }}">
+                    <ng-container *ngIf="editedRowIndex !== row.id; else editCell">
+                        {{ row.reason }}
+                    </ng-container>
+                    <ng-template #editCell>
+                        <input [(ngModel)]="row.reason" placeholder="Enter forecast quantity" type="text"
+                            class="forecast-quantity-input">
+                    </ng-template>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let row">
+                    <ng-container *ngIf="editedRowIndex !== row.id; else saveCancel">
+                        <button mat-icon-button (click)="startEditing(row)" [disabled]="shouldDisableEditButton(row)"
+                            matTooltip="Edit Forecast Quantity">
+                            <mat-icon>edit</mat-icon>
+                            <!-- edit -->
+                        </button>
+
+                    </ng-container>
+                    <ng-template #saveCancel>
+                        <button mat-icon-button color="primary" (click)="saveRow(row)">
+                            <mat-icon>done</mat-icon>
+                            <!-- done -->
+                        </button>
+                        <button mat-icon-button color="warn" (click)="cancelEditing(row)">
+                            <mat-icon>cancel</mat-icon>
+                            <!-- cancel -->
+                        </button>
+                    </ng-template>
+                </td>
+            </ng-container>
+
+            <!-- Table rows -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5,10, 20, 50]" showFirstLastButtons></mat-paginator>
+    </div>
+</div>

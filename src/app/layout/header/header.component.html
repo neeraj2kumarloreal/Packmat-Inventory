@@ -1,22 +1,35 @@
 <!-- toolbar.component.html -->
 <mat-toolbar color="primary">
-    <button
-     mat-icon-button
-     class="neumorphic-button"
-     class="example-icon"
-     aria-label="Toggle Sidebar"
-     (click)="toggleSidebar()"
-   >
-     <mat-icon>menu</mat-icon>
-   </button>
-     &nbsp;
-     <span>Packmat Inventory</span>
-     <span class="example-spacer"></span>
-    <button mat-icon-button class="notification-icon" aria-label="Notification icon button">
+  <button mat-icon-button class="neumorphic-button" class="example-icon" aria-label="Toggle Sidebar"
+    (click)="toggleSidebar()" *ngIf="title === 'Packmat Inventory'">
+    <mat-icon>menu</mat-icon>
+  </button>
+  &nbsp;
+  <!-- <img src="https://loreal.sharepoint.com/sites/RIDemiGrand/PackmatDocuments/LorealLogo.png"
+    style="width: 6.5em;margin-right: 10px;" alt="Loreal Logo" /> -->
+  <a [routerLink]="['/home']" style="display: flex;">
+    <img src="https://loreal.sharepoint.com/sites/RIDemiGrand/PackmatDocuments/LorealLogo.png"
+      style="width: 6.5em;margin-right: 10px;" alt="Loreal Logo" />
+  </a>
+  <div class="header-menu-container">
+    <a mat-button routerLink="/home" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a mat-button routerLink="/packmat" routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: false }">Packmat Inventory</a>
+    <a mat-button routerLink="/gatepass" routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: false }">Gatepass</a>
+  </div>
+  <!-- <span>{{title}}</span>
+  <button mat-mini-fab color="warn" matTooltip="Back" 
+    aria-label="Example icon button with a menu icon" class="black-button" (click)="goHome()">
+    <mat-icon>arrow_back</mat-icon>
+  </button> -->
+  <span class="example-spacer"></span>
+  <!-- <button mat-icon-button class="notification-icon" aria-label="Notification icon button">
      <mat-icon>notifications</mat-icon>
    </button>
      &nbsp;
    
-   <button mat-button routerLink="/profile" routerLinkActive="active" class="neumorphic-button">Profile</button>
-   
-   </mat-toolbar>
+   <button mat-button class="neumorphic-button">Profile</button> -->
+  <!-- <span>{{currentUserName}}</span> -->
+  <span class="profile">{{ getInitials() }}</span>
+</mat-toolbar>

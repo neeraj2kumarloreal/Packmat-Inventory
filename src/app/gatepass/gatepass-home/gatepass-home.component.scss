@@ -1,0 +1,32 @@
+@import '../gatepass.module.scss';
+
+.container {
+    min-height: 100vh;
+}
+
+.tab-content {
+    min-height: 600px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+    }
+
+    header h1 {
+        font-size: 24px !important;
+    }
+
+    header p {
+        font-size: 14px !important;
+    }
+}
+.app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    z-index: 1000; /* Ensure the header is above other content */
+  }
+  

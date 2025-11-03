@@ -1,0 +1,40 @@
+<!-- toolbar.component.html -->
+<mat-toolbar color="primary">
+    <span>DG Apps</span>
+    <span class="example-spacer"></span>
+    <!-- <button mat-icon-button class="notification-icon" aria-label="Notification icon button">
+       <mat-icon>notifications</mat-icon>
+     </button>
+       &nbsp;
+     
+     <button mat-button class="neumorphic-button">Profile</button> -->
+    <!-- <span>{{currentUserName}}</span> -->
+    <span class="profile">{{ getInitials() }}</span>
+
+</mat-toolbar>
+<div class="card-container flex-direction-column-sm">
+    <mat-card class="card" (click)="handlePackmatClick()">
+        <!-- <mat-card-header>
+            <mat-card-title> <img src="assets/car.png"></mat-card-title>
+        </mat-card-header> -->
+        <mat-card-content><mat-card-title>Packmat</mat-card-title></mat-card-content>
+    </mat-card>
+    <mat-card class="card" (click)="handleGatepassClick()">
+        <!-- <mat-card-header>
+            <mat-card-title><img src="assets/bus.png"></mat-card-title>
+        </mat-card-header> -->
+        <mat-card-content><mat-card-title>Gatepass</mat-card-title></mat-card-content>
+    </mat-card>
+    <mat-card class="card" (click)="handleQualityImprovementOpportunityClick()">
+        <!-- <mat-card-header>
+            <mat-card-title><img src="assets/bus.png"></mat-card-title>
+        </mat-card-header> -->
+        <mat-card-content><mat-card-title>Quality Improvement Opportunity</mat-card-title></mat-card-content>
+    </mat-card>
+
+
+</div>
+
+<mat-toolbar class="footer" color="primary">
+    <div class="toolbar-content">All rights reserved @Loreal India</div>
+</mat-toolbar>

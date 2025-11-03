@@ -1,0 +1,124 @@
+<div class="main-class">
+    <h1 class="main-header">Component Request Details</h1>
+    <form [formGroup]="componentRequestForm">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="start stretch">
+            <!-- Left Column: Autocomplete, Name, and Available Quantity -->
+            <div fxFlex="75" fxLayout="column" fxLayoutGap="16px">
+                <mat-form-field appearance="outline" fxFlex>
+                    <mat-label>Component Name</mat-label>
+                    <input matInput formControlName="name" placeholder="Component Name" readonly />
+
+                </mat-form-field>
+
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="start stretch">
+                    <mat-form-field appearance="outline" fxFlex>
+                        <mat-label>Component Code</mat-label>
+                        <input matInput formControlName="code" placeholder="Component Code" readonly />
+
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" fxFlex>
+                        <mat-label>Requested Quantity</mat-label>
+                        <input matInput formControlName="requestedQuantity" placeholder="Enter Requested Quantity"
+                            type="number" readonly />
+
+                    </mat-form-field>
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="start stretch">
+                    <mat-form-field appearance="outline" fxFlex>
+                        <mat-label>DG Reference Number</mat-label>
+                        <input matInput formControlName="dgReferenceNumber" placeholder="Enter Code" readonly />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" fxFlex>
+                        <mat-label>Request Date</mat-label>
+                        <input matInput formControlName="requestDate" placeholder="Enter Request Date" readonly />
+                    </mat-form-field>
+                </div>
+
+
+            </div>
+
+            <!-- Right Column: Product Image -->
+            <div fxFlex="25" fxLayout="column" fxLayoutAlign="start center">
+                <h4>Product Image</h4>
+                <img [src]="imageURL" alt="Product Image" style="max-width: 100%; height: 200px;" />
+            </div>
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center">
+
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Purpose</mat-label>
+                <input matInput formControlName="purpose" placeholder="Enter Purpose" readonly />
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Application</mat-label>
+                <input matInput formControlName="application" placeholder="Enter Application" readonly />
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Metier & Project Name</mat-label>
+                <input matInput formControlName="metierAndProjectName" placeholder="Enter Metier & Project Name"
+                    readonly />
+
+            </mat-form-field>
+
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" style="align-items: center;">
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Requested By</mat-label>
+                <input matInput formControlName="requestedBy" placeholder="Enter Requested By" readonly />
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Required Date</mat-label>
+                <input matInput formControlName="requiredDate" placeholder="Enter Required Date" readonly />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Requirement is part of yearly forecast ?</mat-label>
+                <input matInput formControlName="isReqPartOfYearlyForecast"
+                    placeholder="Enter Requirement is part of yearly forecast ?" readonly />
+            </mat-form-field>
+        </div>
+    </form>
+    <h1>Comments</h1>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="processedBy">
+            <th mat-header-cell *matHeaderCellDef>Processed By</th>
+            <!-- element?.processedBy?.$DI_1  -->
+            <td mat-cell *matCellDef="let element"> {{element?.processedBy}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="processedDate">
+            <th mat-header-cell *matHeaderCellDef> Processed Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.processedDate | date:'dd/MM/yyyy'}} </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="outcome">
+            <th mat-header-cell *matHeaderCellDef> Outcome </th>
+            <td mat-cell *matCellDef="let element"> {{element.outcome }} </td>
+        </ng-container>
+        <ng-container matColumnDef="remark">
+            <th mat-header-cell *matHeaderCellDef> Remark </th>
+            <td mat-cell *matCellDef="let element"> {{element.remark || 'N/A'}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4" class="no-data">No data available.</td>
+        </tr>
+    </table>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center"
+        style="margin-top:40px">
+
+        <button mat-raised-button color="primary" matTooltip="Back" [routerLink]="['/packmat/request']"
+            aria-label="Example icon button with a menu icon">
+            <mat-icon>arrow_back</mat-icon> Back
+        </button>
+
+    </div>
+</div>

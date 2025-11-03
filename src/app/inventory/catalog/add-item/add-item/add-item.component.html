@@ -1,0 +1,85 @@
+<mat-toolbar color="primary">
+    <span>Add Component</span>
+    <span class="example-spacer"></span>
+    <span class="spacer"></span>
+    <button class="mat-dialog-close" mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+</mat-toolbar>
+
+<mat-dialog-content class="mat-typography" style="overflow-x: hidden;">
+    <!-- <h1>Request Details</h1> -->
+    <form [formGroup]="componentForm">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center">
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Component Name</mat-label>
+                <input matInput formControlName="componentName" placeholder="Enter Component Name" required />
+                <mat-error *ngIf="componentForm.get('componentName')?.hasError('required')">{{
+                    getErrorMessage()
+                    }}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Component Code</mat-label>
+                <input matInput formControlName="code" placeholder="Enter Component Code" required />
+                <mat-error *ngIf="componentForm.get('code')?.hasError('required')">{{
+                    getErrorMessage()
+                    }}</mat-error>
+            </mat-form-field>
+
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center">
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Category</mat-label>
+                <mat-select formControlName="category" required>
+                    <mat-option *ngFor="let category of categoryList" [value]="category">{{
+                        category?.title
+                        }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="componentForm.get('category')?.hasError('required')">{{
+                    getErrorMessage()
+                    }}</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Available Quantity</mat-label>
+                <input matInput formControlName="availableQuantity" placeholder="Enter Available Quantity" required
+                    type="number" />
+                <mat-error *ngIf="componentForm.get('availableQuantity')?.hasError('required')">{{
+                    getErrorMessage()
+                    }}</mat-error>
+            </mat-form-field>
+
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px">
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Upload Component Image </mat-label>
+                <input [hidden]="true" (change)="onFileSelect($event)" type="file" accept="image/png, image/jpeg"
+                    #fileSelect />
+                <input readonly matInput formControlName="imageName" placeholder="Select file..." />
+                <button *ngIf="this.base64File" (click)="onClear()" matSuffix matTooltip="Remove selected file"
+                    [matTooltipPosition]="'above'" type="button" color="warn" mat-icon-button>
+                    <mat-icon>close</mat-icon>
+                </button>
+                <button matSuffix mat-icon-button (click)="fileSelect.click()" matTooltip="Select a file"
+                    [matTooltipPosition]="'above'">
+                    <mat-icon>file_upload</mat-icon>
+                </button>
+            </mat-form-field>
+            <div fxFlex><img [src]="url" *ngIf="url" style="height: 100%;
+                width: 50%;" /></div>
+            <!-- <input type="file" (change)="onFileSelect($event)" accept="image/*" /> -->
+        </div>
+
+
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <!-- [disabled]="!componentForm.valid" -->
+    <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()" [disabled]="!componentForm.valid">
+        <mat-icon>save</mat-icon> Submit
+    </button>
+    <button mat-raised-button color="primary" mat-dialog-close>
+        <mat-icon>cancel</mat-icon> Close
+    </button>
+</mat-dialog-actions>

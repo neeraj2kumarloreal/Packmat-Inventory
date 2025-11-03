@@ -1,0 +1,102 @@
+<div class="main-class">
+<div class="mat-elevation-z8">
+    <div style="padding: 10px 10px;
+    border-bottom: 1px solid #dddbdb;
+    display: flex
+;
+    align-items: center;
+    justify-content: space-between;
+">
+        <mat-form-field style="width: 40%;margin-bottom: -1.25em;">
+            <mat-label>Search</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Search by Component Name or Code">
+        </mat-form-field>
+        
+    </div>
+
+    <table mat-table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Component Name</th>
+            <td mat-cell *matCellDef="let row">
+                <ng-container>
+                    {{ row.name }}
+                </ng-container>
+                <!-- <ng-template #editCell>
+                    <input [(ngModel)]="row.name" placeholder="Name">
+                </ng-template> -->
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="code">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Component Code</th>
+            <td mat-cell *matCellDef="let row">
+                <ng-container>
+                    {{ row.code }}
+                </ng-container>
+                <!-- <ng-template #editCell>
+                    <input [(ngModel)]="row.email" placeholder="Email">
+                </ng-template> -->
+            </td>
+        </ng-container>
+        <!-- <ng-container matColumnDef="image">
+            <th mat-header-cell *matHeaderCellDef>Component Image</th>
+            <td mat-cell *matCellDef="let element">
+
+                <img [src]="element?.image" alt="Product Image" class="product-img" />
+            </td>
+        </ng-container> -->
+        <ng-container matColumnDef="image">
+            <th mat-header-cell *matHeaderCellDef>Component Image</th>
+            <td mat-cell *matCellDef="let element">
+                <div class="image-container" #imageContainer> 
+                    <img [src]="element.image" alt="Product Image" class="product-img">
+                    <img [src]="element.largeImage || element.image" alt="Enlarged Product Image" class="large-image"> 
+                </div>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="forecastQuantity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Forecast Quantity</th>
+            <td mat-cell *matCellDef="let row">
+                <ng-container>
+                    {{ row.forecastQuantity }}
+                </ng-container>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="availableQuantity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Available Quantity</th>
+            <td mat-cell *matCellDef="let row">
+                <ng-container>
+                    {{ row.availableQuantity }}
+                </ng-container>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="needToOrderQuantity">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Need To Order Quantity</th>
+            <td mat-cell *matCellDef="let row">
+                <ng-container>
+                    {{ row.needToOrderQuantity }}
+                </ng-container>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let element">
+      
+              <button mat-icon-button color="primary" (click)="handleViewAction(element)">
+                <mat-icon> visibility </mat-icon>
+              </button>
+              <!-- <button mat-icon-button color="primary" (click)="handleDeleteAction(element)">
+                  <mat-icon> delete </mat-icon>
+                </button> -->
+            </td>
+          </ng-container>
+
+        <!-- Table rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[5,10, 20, 50]" showFirstLastButtons></mat-paginator>
+</div>
+</div>

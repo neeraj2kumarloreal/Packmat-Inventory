@@ -1,0 +1,160 @@
+<mat-dialog-content style="overflow-x: hidden; padding: 0px;">
+    <div class="card" style=" background: #f8fafc; margin-bottom: 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="color: #374151; font-size: 18px;">Invoice Number - {{ requestDetails.invoiceNumber }}</h3>
+            <button class="btn btn-outline" mat-dialog-close style="padding: 8px 12px;">
+                <span class="material-icons" style="font-size: 16px;">close</span>
+                Close
+            </button>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Request Type:</label>
+                <p style="margin-top: 4px; color: #374151;">{{ requestDetails.requestType }}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Customer Name:</label>
+                <p style="margin-top: 4px; color: #374151;">{{ requestDetails.customerName }}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Customer Email:</label>
+                <p style="margin-top: 4px; color: #374151;">{{ requestDetails.customerEmail || 'N/A' }}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Customer Address:</label>
+                <p style="margin-top: 4px; color: #374151;">{{ requestDetails.customerAddress }}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">No. of Packages</label>
+                <p style="margin-top: 4px; color: #374151;">{{ requestDetails.noOfPackages }}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Weight</label>
+                <p style="margin-top: 4px; color: #374151;">{{ requestDetails.weight }}</p>
+            </div>
+        </div>
+
+        <!-- Items Table -->
+        <div class="table-container" style="margin-top: 20px;">
+            <h4 style="margin-bottom: 0;color: #374151;padding: 10px 15px;">Items</h4>
+            <table mat-table [dataSource]="dataSource" class="table" matSort>
+                <!-- Dynamic Header -->
+                <ng-container *ngFor="let col of columnConfigs" [matColumnDef]="col.columnDef">
+                    <th mat-header-cell *matHeaderCellDef>{{ col.header }}</th>
+                    <td mat-cell *matCellDef="let element">{{ col.cell(element) }}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5,10, 20, 50]" showFirstLastButtons></mat-paginator>
+
+        </div>
+
+        <!-- Summary -->
+        <div class="summary-section">
+            <div class="summary-row summary-total">
+                <span>Total Amount:</span>
+                <span>₹{{ requestDetails?.subTotal?.toFixed(2) }}</span>
+            </div>
+        </div>
+
+        <form [formGroup]="otherDetailsForm" (ngSubmit)="handleSubmit()">
+            <h3 style="margin-bottom: 20px; color: #374151; font-size: 18px;">Transportation Details</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="transporterName">Name *</label>
+                    <select id="transporterName" class="form-input" formControlName="transporterName" required>
+                        <option value="" disabled selected>Select Name</option>
+                        <option *ngFor="let transporterName of transporterList" [value]="transporterName">
+                            {{ transporterName }}
+                        </option>
+                    </select>
+                    <div class="form-error" *ngIf="otherDetailsForm.get('transporterName')?.hasError('required')">
+                        {{ getErrorMessage() }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="vehicalNo">Vehical Number</label>
+                    <input id="vehicalNo" class="form-input" formControlName="vehicalNo"
+                        placeholder="Enter Vehical Number" />
+
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="lrNo">LR Number</label>
+                    <input id="lrNo" class="form-input" formControlName="lrNo" placeholder="Enter LR Number" />
+
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="sealNo">Seal Number</label>
+                    <input id="sealNo" class="form-input" formControlName="sealNo" placeholder="Enter Seal Number" />
+                </div>
+            </div>
+            <h3 style="margin-bottom: 20px; color: #374151; font-size: 18px;">Other Details</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="poNo">P.O. No.</label>
+                    <input id="lrNo" class="form-input" formControlName="poNo" placeholder="Enter P.O. No." />
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="poDate">P.O. Date</label>
+                    <input style="font-family: inherit;" id="poDate" type="date" class="form-input"
+                        formControlName="poDate" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="valueofProduct">Value of Product</label>
+                    <input id="valueofProduct" class="form-input" formControlName="valueofProduct"
+                        placeholder="Enter Value of Product" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="taxes">Taxes</label>
+                    <input type="number" id="taxes" class="form-input" formControlName="taxes"
+                        placeholder="Enter Taxes" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="otherCharges">Other Charges</label>
+                    <input type="number" id="otherCharges" class="form-input" formControlName="otherCharges"
+                        placeholder="Enter Other Charges" />
+                </div>
+
+            </div>
+            <h3 style="margin-bottom: 20px; color: #374151; font-size: 18px;">Select Next Step</h3>
+                <div class="form-row" style="grid-template-columns:auto">
+
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label class="form-label" style="margin-bottom: 8px; display: block;">Action *</label>
+                        <label>
+                            <input type="radio" formControlName="action" value="approve" />
+                            Send for Approval
+                        </label>
+                        &nbsp;&nbsp;
+                        <label>
+                            <input type="radio" formControlName="action" value="sentBack" />
+                            Sent Back for Changes
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Remark *</label>
+                        <textarea id="remark" class="form-input" formControlName="remark"
+                            placeholder="Enter your remark" rows="4" style="font-family: inherit;"></textarea>
+                    </div>
+                </div>
+            <div class="action-buttons">
+                <button type="button" class="btn btn-secondary" mat-dialog-close>
+                    <span class="material-icons" style="font-size: 16px;">close</span>
+                    Close
+                </button>
+                <button type="submit" class="btn btn-primary" [disabled]="!otherDetailsForm.valid">
+                    <span class="material-icons" style="font-size: 16px;">send</span>
+                    Submit
+                </button>
+            </div>
+
+        </form>
+    </div>
+</mat-dialog-content>

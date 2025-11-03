@@ -1,0 +1,122 @@
+<mat-toolbar color="primary">
+    <span>Process Request</span>
+    <span class="example-spacer"></span>
+    <span class="spacer"></span>
+    <button class="mat-dialog-close" mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+    </button>
+</mat-toolbar>
+
+<mat-dialog-content class="mat-typography" style="overflow-x: hidden;">
+    <h1>Request Details</h1>
+    <form [formGroup]="componentRequestForm">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center">
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Component Code</mat-label>
+                <input matInput formControlName="code" placeholder="Enter Code" required readonly />
+
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Available Quantity</mat-label>
+                <input matInput formControlName="availableQuantity" placeholder="Enter Quantity" required type="number"
+                    readonly />
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Requested Quantity</mat-label>
+                <input matInput formControlName="requestedQuantity" placeholder="Enter Quantity" required type="number"
+                    readonly />
+            </mat-form-field>
+
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center">
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Required Date</mat-label>
+                <input matInput formControlName="requiredDate" placeholder="Enter Required Date" required readonly />
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>DG Reference Number</mat-label>
+                <input matInput formControlName="dgReferenceNumber" placeholder="Enter Code" required readonly />
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Request Date</mat-label>
+                <input matInput formControlName="requestDate" placeholder="Enter Request Date" required readonly />
+            </mat-form-field>
+
+
+
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center">
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Requested By</mat-label>
+                <input matInput formControlName="requestedBy" placeholder="Enter Requested By" required readonly />
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Purpose</mat-label>
+                <input matInput formControlName="purpose" placeholder="Enter Purpose" required readonly />
+            </mat-form-field>
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Metier & Project Name</mat-label>
+                <input matInput formControlName="metierAndProjectName" placeholder="Enter Metier & Project Name"
+                    readonly required />
+
+            </mat-form-field>
+
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" style="align-items: center;">
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Application</mat-label>
+                <input matInput formControlName="application" placeholder="Enter Application" required readonly />
+
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Requirement is part of yearly forecast ?</mat-label>
+                <input matInput formControlName="isReqPartOfYearlyForecast"
+                    placeholder="Enter Requirement is part of yearly forecast ?" required readonly />
+            </mat-form-field>
+        </div>
+        <h1>Submission Review</h1>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center">
+            <mat-form-field appearance="outline" fxFlex
+                *ngIf="data.status === 'Under Review' || data.status === 'In Progress'">
+                <!-- *ngIf="data.status === 'Under Review' || data.status === 'In Progress'" -->
+                <!-- min="1" -->
+                <!-- min="1" [max]="availableQuantity"  -->
+                <mat-label>Updated Quantity (Optional)</mat-label>
+                <input matInput formControlName="updatedQuantity" placeholder="Enter Updated Quantity" type="number"
+                min="1" [max]="availableQuantity" />
+                <!-- <mat-error *ngIf="componentRequestForm.get('updatedQuantity')?.hasError('max')">
+                    The updated quantity cannot exceed the available quantity.
+                </mat-error> -->
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Action</mat-label>
+                <mat-select formControlName="approvalAction" required>
+                    <mat-option *ngFor="let action of actions" [value]="action">{{
+                        action
+                        }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="componentRequestForm.get('approvalAction')?.hasError('required')">{{
+                    getErrorMessage()
+                    }}</mat-error>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px" fxLayoutAlign="center center">
+            <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Remark</mat-label>
+                <textarea matInput formControlName="approvalRemark" placeholder="Enter Remark"></textarea>
+            </mat-form-field>
+        </div>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" type="submit" (click)="handleSubmit()"
+        [disabled]="!componentRequestForm.valid">
+        <mat-icon>save</mat-icon> Submit
+    </button>
+    <button mat-raised-button color="primary" mat-dialog-close>
+        <mat-icon>cancel</mat-icon> Close
+    </button>
+</mat-dialog-actions>

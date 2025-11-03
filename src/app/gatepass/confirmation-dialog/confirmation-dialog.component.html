@@ -1,0 +1,39 @@
+<mat-dialog-content style="overflow-x: hidden; padding: 0px;">
+    <div class="card" style=" background: #f8fafc; margin-bottom: 0;">
+        <div style="display: flex; justify-content: end; align-items: center; margin-bottom: 20px;">
+            <button class="btn btn-outline" mat-dialog-close style="padding: 8px 12px;">
+                <span class="material-icons" style="font-size: 16px;">close</span>
+                Close
+            </button>
+        </div>
+        <div *ngIf="action === 'approve'">
+            <p>Are you sure you want to {{action}} this request?</p>
+            <div class="action-buttons" style="justify-content: end;">
+                <button type="button" class="btn btn-secondary" mat-dialog-close>
+                    <span class="material-icons" style="font-size: 16px;">close</span>
+                    No
+                </button>
+                <button type="submit" class="btn btn-primary" (click)="takeAction()">
+                    <span class="material-icons" style="font-size: 16px;">send</span>
+                    Yes
+                </button>
+            </div>
+        </div>
+        <div *ngIf="action === 'reject'">
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Remark *</label>
+                    <textarea class="form-input" [(ngModel)]="currentRequest.remark" placeholder="Enter your remark"
+                        rows="4" style="font-family: inherit;"></textarea>
+                </div>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-danger" (click)="reject()">
+                    <span class="material-icons" style="font-size: 16px;">close</span>
+                    Reject
+                </button>
+            </div>
+        </div>
+
+    </div>
+</mat-dialog-content>

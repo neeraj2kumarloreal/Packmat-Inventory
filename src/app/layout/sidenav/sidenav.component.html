@@ -15,23 +15,78 @@
           <li><a routerLink="/dashboard/messages" routerLinkActive="active"><span class="menu-icon material-icons">message</span><span class="menu-text">Messages</span></a></li>
         </ul>
       </li> -->
-      <li>
+      <!-- <li>
         <a routerLink="/catalog" routerLinkActive="active">
           <span class="menu-icon material-icons">inventory_2</span>
           <span class="menu-text">Catalog</span>
         </a>
       </li>
      
-      <li>
+      <li *ngIf="checkAccess('Forecast')">
         <a routerLink="/forecast" routerLinkActive="active">
           <span class="menu-icon material-icons">timeline</span>
           <span class="menu-text">Forecast</span>
         </a>
       </li>
-      <li>
+      
+      <li *ngIf="checkAccess('Forecast Overview')">
+        <a routerLink="/forecast-overview" routerLinkActive="active">
+          <span class="menu-icon material-icons">explore</span>
+          <span class="menu-text">Forecast Overview</span>
+        </a>
+      </li>
+      <li *ngIf="checkAccess('Stock In')">
         <a routerLink="/stock-in" routerLinkActive="active">
           <span class="menu-icon material-icons">warehouse</span>
           <span class="menu-text">Stock In</span>
+        </a>
+      </li>
+      <li *ngIf="checkAccess('Component Request')">
+        <a routerLink="/component-request" routerLinkActive="active">
+          <span class="menu-icon material-icons">add_box</span>
+          <span class="menu-text">Component Request</span>
+        </a>
+      </li>
+      <li *ngIf="checkAccess('Report')">
+        <a routerLink="/report" routerLinkActive="active">
+          <span class="menu-icon material-icons">picture_as_pdf</span>
+          <span class="menu-text">Report</span>
+        </a>
+      </li> -->
+      <li>
+        <a routerLink="/packmat/catalog" routerLinkActive="active">
+          <span class="menu-icon material-icons">inventory_2</span>
+          <span class="menu-text">Catalog</span>
+        </a>
+      </li>
+      <li *ngIf="checkAccess('Forecast')">
+        <a routerLink="/packmat/forecast" routerLinkActive="active">
+          <span class="menu-icon material-icons">timeline</span>
+          <span class="menu-text">Forecast</span>
+        </a>
+      </li>
+      <li *ngIf="checkAccess('Forecast Overview')">
+        <a routerLink="/packmat/forecast-overview" routerLinkActive="active">
+          <span class="menu-icon material-icons">explore</span>
+          <span class="menu-text">Forecast Overview</span>
+        </a>
+      </li>
+      <li *ngIf="checkAccess('Stock In')">
+        <a routerLink="/packmat/stock-in" routerLinkActive="active">
+          <span class="menu-icon material-icons">warehouse</span>
+          <span class="menu-text">Stock In</span>
+        </a>
+      </li>
+      <li *ngIf="checkAccess('Component Request')">
+        <a routerLink="/packmat/request" routerLinkActive="active">
+          <span class="menu-icon material-icons">add_box</span>
+          <span class="menu-text">Component Request</span>
+        </a>
+      </li>
+      <li *ngIf="checkAccess('Report')">
+        <a routerLink="/packmat/report" routerLinkActive="active">
+          <span class="menu-icon material-icons">picture_as_pdf</span>
+          <span class="menu-text">Report</span>
         </a>
       </li>
       <!-- <li>

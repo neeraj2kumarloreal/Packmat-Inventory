@@ -1,6 +1,4 @@
-.mat-elevation-z8 {
-    width: 80%;
-}
+
 
 .forecast-quantity-input {
     padding: 10px 4px;
@@ -10,4 +8,9 @@
 
 .mat-mdc-form-field-bottom-align::before{
     display: none;
+}
+
+.product-img-forecast-page {
+    max-width: 100%;
+    height: 296px;
 }

@@ -1,0 +1,107 @@
+<div class="raise-qio-container">
+    <h1>Raise Quality Improvement Opportunity</h1>
+
+    <form (ngSubmit)="onSubmit()" #qioForm="ngForm">
+        <div class="form-group">
+            <label for="evidence">Evidence Image *</label>
+            <div class="image-upload">
+                <input type="file" id="evidence" accept="image/*" (change)="onFileSelected($event)" #fileInput />
+                <button type="button" class="capt
+                ure-btn" (click)="fileInput.click()">
+                    Choose/Capture Image
+                </button>
+                <div *ngIf="selectedFile" class="file-preview">
+                    <img [src]="imagePreview" alt="Preview" />
+                    <span>{{ selectedFile.name }}</span>
+                    <button type="button" class="remove-btn" (click)="removeImage()">×</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="observation">Observation *</label>
+            <textarea id="observation" [(ngModel)]="formData.observation" name="observation" rows="4" required
+                placeholder="Describe the improvement suggestion..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="site">Observation for Site *</label>
+            <select id="site" [(ngModel)]="formData.site_id" name="site" (change)="onSiteChange()" required>
+                <option value="">Select Site</option>
+                <option *ngFor="let site of sites" [value]="site.id">
+                    {{ site.name }}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="location">Observation Location/Area *</label>
+            <select id="location" [(ngModel)]="formData.location_id" name="location" [disabled]="!formData.site_id"
+                required>
+                <option value="">Select Location</option>
+                <option *ngFor="let location of locations" [value]="location.id">
+                    {{ location.name }}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category *</label>
+            <select id="category" [(ngModel)]="formData.category" name="category" required>
+                <option value="">Select Category</option>
+                <option value="QIO">QIO</option>
+                <option value="HIO">HIO</option>
+                <option value="Quality Incident">Quality Incident</option>
+                <option value="Gap with Std.">Gap with Std.</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="criticality">Criticality *</label>
+            <select id="criticality" [(ngModel)]="formData.criticality" name="criticality"
+                (change)="onCriticalityChange()" required>
+                <option value="">Select Criticality</option>
+                <option value="High">High (1 week)</option>
+                <option value="Low">Low (1 month)</option>
+            </select>
+        </div>
+
+        <div class="form-group" *ngIf="formData.target_date">
+            <label>Target Date</label>
+            <input type="text" [value]="formData.target_date" readonly class="readonly-field" />
+        </div>
+
+        <div class="form-group">
+            <label for="assignedTo">Assigned To *</label>
+            <select id="assignedTo" [(ngModel)]="formData.assigned_to_id" name="assignedTo"
+                [disabled]="!formData.site_id" required>
+                <option value="">Select Representative</option>
+                <option *ngFor="let rep of qualityReps" [value]="rep.id">
+                    {{ rep.name }}{{ rep.is_default ? ' (Default)' : '' }}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="raisedByName">Your Name *</label>
+            <input type="text" id="raisedByName" [(ngModel)]="formData.raised_by_name" name="raisedByName" required
+                placeholder="Enter your name" readonly />
+        </div>
+
+        <div class="form-group">
+            <label for="raisedByEmail">Your Email *</label>
+            <input type="email" id="raisedByEmail" [(ngModel)]="formData.raised_by_email" name="raisedByEmail" required
+                placeholder="your.email@company.com" readonly/>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" [disabled]="!qioForm.valid || isSubmitting || !selectedFile" class="submit-btn">
+                {{ isSubmitting ? 'Submitting...' : 'Submit QIO' }}
+            </button>
+        </div>
+
+        <div *ngIf="submitMessage" class="message" [class.error]="submitError">
+            {{ submitMessage }}
+        </div>
+    </form>
+</div>

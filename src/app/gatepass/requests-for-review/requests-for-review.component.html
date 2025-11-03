@@ -1,0 +1,115 @@
+<div class="card fade-in">
+    <h2 style="margin-bottom: 24px; color: #1e293b; font-size: 24px; font-weight: 600;">Requests for Review</h2>
+
+    <!-- <div *ngIf="pendingRequests.data.length === 0" class="alert alert-info">
+        No pending requests found for review.
+    </div> -->
+    <!-- *ngIf="pendingRequests.data.length > 0" -->
+    <div class="table-container">
+        <table mat-table [dataSource]="pendingRequests" class="table" matSort>
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Number</th>
+                <td mat-cell *matCellDef="let request">{{ request.invoiceNumber }}</td>
+            </ng-container>
+            <!-- Type -->
+            <ng-container matColumnDef="requestType">
+                <th mat-header-cell *matHeaderCellDef>Request Type</th>
+                <td mat-cell *matCellDef="let request">{{ request.requestType }}</td>
+            </ng-container>
+            <ng-container matColumnDef="createdBy">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Created By</th>
+                <td mat-cell *matCellDef="let request">{{ request.createdBy }}</td>
+            </ng-container>
+            <ng-container matColumnDef="createdDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Created Date</th>
+                <td mat-cell *matCellDef="let request">{{ request.createdDate | date:'short' }}</td>
+            </ng-container>
+            <!-- Total Amount -->
+            <ng-container matColumnDef="totalAmount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Sub Total</th>
+                <td mat-cell *matCellDef="let request" class="amount">₹{{ request.subTotal.toFixed(2) }}</td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let request">
+                    <span class="status-badge status-pending">
+                        {{ request.requestStatus }}
+                    </span>
+                </td>
+            </ng-container>
+            <!-- Actions -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let request">
+                    <div class="action-buttons" style="gap: 8px;">
+                        <button class="btn btn-outline" (click)="handleViewRequest(request)"
+                            style="padding: 6px 12px; font-size: 12px;" matTooltip="View">
+                            <span class="material-icons" style="font-size: 14px;">visibility</span>
+                            
+                        </button>
+                        <button class="btn btn-primary" (click)="sendForReview(request)"
+                            style="padding: 6px 12px; font-size: 12px;" matTooltip="Send for Approval">
+                            <span class="material-icons" style="font-size: 14px;">send</span>
+                         
+                        </button>
+                    </div>
+                </td>
+            </ng-container>
+            <!-- Header and Row Declarations -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <div *ngIf="pendingRequests.data.length === 0" class="alert alert-info" style="margin: 10px 10px;">
+            No pending requests found for review.
+        </div>
+        <mat-paginator [pageSizeOptions]="[5,10, 20, 50]" showFirstLastButtons></mat-paginator>
+        
+    </div>
+
+    <!-- Request Details Modal -->
+    <div *ngIf="selectedRequest" class="card" style="margin-top: 24px; background: #f8fafc; border: 1px solid #e2e8f0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="color: #374151; font-size: 18px;">Request Details - {{ selectedRequest.id }}</h3>
+            <button class="btn btn-outline" (click)="closeRequestDetails()" style="padding: 8px 12px;">
+                <span class="material-icons" style="font-size: 16px;">close</span>
+                Close
+            </button>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label">Request Type:</label>
+                <p style="margin-top: 4px; color: #374151;">{{ selectedRequest.requestType }}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Created By:</label>
+                <p style="margin-top: 4px; color: #374151;">{{ selectedRequest.createdBy }}</p>
+            </div>
+            <div class="form-group" *ngIf="selectedRequest.customerName">
+                <label class="form-label">User Name:</label>
+                <p style="margin-top: 4px; color: #374151;">{{ selectedRequest.customerName }}</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Address:</label>
+                <p style="margin-top: 4px; color: #374151;">{{ selectedRequest.address }}</p>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary-section">
+            <div class="summary-row summary-total">
+                <span>Total Amount:</span>
+                <span>₹{{ selectedRequest.totalAmount.toFixed(2) }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Messages -->
+    <div *ngIf="alertMessage" class="alert" [ngClass]="{
+      'alert-success': alertType === 'success',
+      'alert-error': alertType === 'error',
+      'alert-info': alertType === 'info'
+    }">
+        {{ alertMessage }}
+    </div>
+</div>
